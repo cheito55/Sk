@@ -347,7 +347,7 @@ function makeVideo(item) {
     }
 }
 
-source = {
+var seekeeSource = {
     enable: function(config) {
         try {
             _settings = (config && config.settings) ? config.settings : (_settings || {});
@@ -457,3 +457,9 @@ source = {
         return new VideoSourceDescriptor(built.sources);
     }
 };
+source.enable = seekeeSource.enable;
+source.disable = seekeeSource.disable;
+source.getHome = seekeeSource.getHome;
+source.search = seekeeSource.search;
+source.getContentDetails = seekeeSource.getContentDetails;
+source.getVideoSources = seekeeSource.getVideoSources;
