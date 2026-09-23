@@ -1,0 +1,10 @@
+Seekee 2.14.0 analysis
+Package: com.enzo.paulo
+Version: 2.14.0
+Confirmed API host: https://h5-api.buscari.com
+Confirmed route string in RN bundle:
+  /quan/app/content/recommend/v2/detailPageQuery
+
+The APK also contains WebView/search/resource-sniffing UI resources.
+The strings /model_search/* and /model_webview/* are navigation/router names
+and are NOT used as guessed HTTP endpoints in v0.2.

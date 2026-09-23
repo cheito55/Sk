@@ -1,0 +1,52 @@
+{
+  "name": "Seekee Browser",
+  "description": "Seekee/Buscari API + browser/resource resolver",
+  "author": "cheito55",
+  "platformUrl": "https://seekee.ai",
+  "sourceUrl": "./SeekeeBrowserConfig.json",
+  "repositoryUrl": "",
+  "scriptUrl": "./SeekeeBrowser.js",
+  "version": 2,
+  "iconUrl": "",
+  "id": "b7c3e8f1-2a91-4b67-9f44-0d6a8e2c5173",
+  "scriptSignature": "",
+  "scriptPublicKey": "",
+  "packages": [
+    "Http",
+    "Utilities",
+    "DOMParser"
+  ],
+  "packagesOptional": [
+    "Browser"
+  ],
+  "allowEval": false,
+  "allowUrls": [
+    "h5-api.buscari.com",
+    "test-h5-api.buscari.com",
+    "seekee.ai",
+    "www.seekee.ai"
+  ],
+  "settings": [
+    {
+      "variable": "seekeeBase",
+      "name": "Seekee API base",
+      "description": "Buscari API host used by Seekee 2.14.0.",
+      "type": "Text",
+      "default": "https://h5-api.buscari.com"
+    },
+    {
+      "variable": "browserEnabled",
+      "name": "Use Browser resolver",
+      "description": "Use PackageBrowser when the installed GrayJay runtime exposes a supported interface.",
+      "type": "Boolean",
+      "default": "true"
+    },
+    {
+      "variable": "debug",
+      "name": "Debug logging",
+      "description": "Log API and resolver diagnostics.",
+      "type": "Boolean",
+      "default": "true"
+    }
+  ]
+}
