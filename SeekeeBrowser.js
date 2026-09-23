@@ -16,6 +16,7 @@
  */
 
 var SEEK_BASE = "https://h5-api.buscari.com";
+var SEEK_DEBUG = true;
 var DETAIL_ROUTE = "/quan/app/content/recommend/v2/detailPageQuery";
 var MAX_SOURCES = 32;
 var MAX_DEPTH = 10;
@@ -23,7 +24,7 @@ var MAX_JSON = 3000000;
 
 function dbg(s) {
     try {
-        if (_settings && _settings.debug === true && _debugLog) {
+        if (SEEK_DEBUG && _debugLog) {
             _debugLog("[SeekeeBrowser] " + String(s));
         }
     } catch (e) {}
@@ -307,7 +308,7 @@ function buildSources(data) {
                     sources.push(new DashSource({name: "Seekee DASH", url: u}));
                 }
             } else {
-                sources.push(new VideoSource({name: "Seekee MP4", url: u}));
+                sources.push(new VideoUrlSource({width: 0, height: 0, container: "video/mp4", codec: "", name: "Seekee MP4", bitrate: 0, duration: 0, url: u}));
             }
         } catch (e) {
             dbg("source constructor failed: " + e);
@@ -347,17 +348,18 @@ function makeVideo(item) {
     }
 }
 
-var seekeeSource = {
+var seekeeMethods = {
     enable: function(config) {
         try {
-            _settings = (config && config.settings) ? config.settings : (_settings || {});
-        } catch (e) {}
-        try {
-            if (_settings && _settings.seekeeBase) {
-                SEEK_BASE = str(_settings.seekeeBase).replace(/\/+$/, "");
+            if (config && config.settings) {
+                if (config.settings.seekeeBase) {
+                    SEEK_BASE = str(config.settings.seekeeBase).replace(/\/+$/, "");
+                }
+                if (config.settings.debug !== undefined) {
+                    SEEK_DEBUG = config.settings.debug === true || str(config.settings.debug) === "true";
+                }
             }
-        } catch (e2) {}
-
+        } catch (e) {}
         dbg("enabled; API base=" + SEEK_BASE);
     },
 
@@ -369,7 +371,7 @@ var seekeeSource = {
          * embedded recommendation datasets, but this source does not pretend
          * those are the live API contract.
          */
-        return new PagedList([], false);
+        return new VideoPager([], false, {});
     },
 
     search: function(query) {
@@ -378,21 +380,21 @@ var seekeeSource = {
          * Numeric IDs are treated as direct detail lookups.
          */
         var q = str(query).replace(/^\s+|\s+$/g, "");
-        if (!q) return new PagedList([], false);
+        if (!q) return new VideoPager([], false, {});
 
         if (/^\d+$/.test(q)) {
             var detail = detailQuery(q);
             var item = normalizeItem(detail);
-            if (item) return new PagedList([makeVideo(item)], false);
+            if (item) return new VideoPager([makeVideo(item)], false, {query: q});
 
             var arr = extractItems(detail);
             var vids = [], i;
             for (i = 0; i < arr.length; i++) vids.push(makeVideo(arr[i]));
-            return new PagedList(vids, false);
+            return new VideoPager(vids, false, {query: q});
         }
 
         dbg("Search text: exact HTTP search route still not exposed by APK; no fake endpoint used.");
-        return new PagedList([], false);
+        return new VideoPager([], false, {});
     },
 
     getContentDetails: function(url) {
@@ -457,9 +459,13 @@ var seekeeSource = {
         return new VideoSourceDescriptor(built.sources);
     }
 };
-source.enable = seekeeSource.enable;
-source.disable = seekeeSource.disable;
-source.getHome = seekeeSource.getHome;
-source.search = seekeeSource.search;
-source.getContentDetails = seekeeSource.getContentDetails;
-source.getVideoSources = seekeeSource.getVideoSources;
+
+source.enable = seekeeMethods.enable;
+source.disable = seekeeMethods.disable;
+source.getHome = seekeeMethods.getHome;
+source.search = seekeeMethods.search;
+source.getContentDetails = seekeeMethods.getContentDetails;
+source.getVideoDetails = seekeeMethods.getContentDetails;
+source.getVideoSources = seekeeMethods.getVideoSources;
+source.isContentDetailsUrl = function(url) { return /^seekee:\/\//i.test(str(url)); };
+source.isVideoDetailsUrl = source.isContentDetailsUrl;
