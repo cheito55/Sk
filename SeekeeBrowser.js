@@ -347,7 +347,7 @@ function makeVideo(item) {
     }
 }
 
-var source = {
+source = {
     enable: function(config) {
         try {
             _settings = (config && config.settings) ? config.settings : (_settings || {});
