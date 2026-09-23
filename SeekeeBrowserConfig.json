@@ -3,7 +3,7 @@
   "description": "Seekee/Buscari API + browser/resource resolver",
   "author": "cheito55",
   "platformUrl": "https://seekee.ai",
-  "sourceUrl": "./SeekeeBrowserConfig.json",
+  "sourceUrl": "https://raw.githubusercontent.com/cheito55/Sk/main/SeekeeBrowserConfig.json",
   "repositoryUrl": "",
   "scriptUrl": "./SeekeeBrowser.js",
   "version": 2,
