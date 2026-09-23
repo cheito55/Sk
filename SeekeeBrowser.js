@@ -1,5 +1,5 @@
 /*
- * Seekee Browser GrayJay Source v0.2
+ * Seekee API GrayJay Source v0.3
  *
  * ES5 compatible.
  *
@@ -7,12 +7,12 @@
  *   API host: https://h5-api.buscari.com
  *   internal API path string:
  *     /quan/app/content/recommend/v2/detailPageQuery
- *   Browser/resource-sniffing UI exists in the APK.
  *
  * Important:
- *   We do not invent a Browser method or a fake media URL.
- *   The HTTP layer is real and can extract playable media URLs when the
- *   returned API/WebView data contains them.
+ *   PackageBrowser is intentionally not requested: GrayJay blocks Browser
+ *   for third-party plugins unless they are debug/official plugins.
+ *   This version therefore uses only the allowed Http package and never
+ *   invents a media URL.
  */
 
 var SEEK_BASE = "https://h5-api.buscari.com";
@@ -347,21 +347,6 @@ function makeVideo(item) {
     }
 }
 
-function browserInfo() {
-    var out = {available: false, methods: []};
-    try {
-        if (typeof Browser === "undefined" || Browser === null) return out;
-        out.available = true;
-        var k;
-        for (k in Browser) {
-            try {
-                if (typeof Browser[k] === "function") out.methods.push(k);
-            } catch (e) {}
-        }
-    } catch (e2) {}
-    return out;
-}
-
 var source = {
     enable: function(config) {
         try {
@@ -373,8 +358,7 @@ var source = {
             }
         } catch (e2) {}
 
-        var bi = browserInfo();
-        dbg("enabled; Browser=" + bi.available + " methods=" + bi.methods.join(","));
+        dbg("enabled; API base=" + SEEK_BASE);
     },
 
     disable: function() {},
@@ -463,7 +447,7 @@ var source = {
 
         var data = detailQuery(id);
         if (!data) {
-            dbg("No API detail data; Browser capability=" + JSON.stringify(browserInfo()));
+            dbg("No API detail data for " + id);
             return new VideoSourceDescriptor([]);
         }
 
