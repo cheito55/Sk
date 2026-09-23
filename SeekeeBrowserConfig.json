@@ -5,7 +5,7 @@
   "platformUrl": "https://seekee.ai",
   "sourceUrl": "https://raw.githubusercontent.com/cheito55/Sk/main/SeekeeBrowserConfig.json",
   "repositoryUrl": "https://github.com/cheito55/Sk",
-  "scriptUrl": "./SeekeeBrowser.js",
+  "scriptUrl": "https://raw.githubusercontent.com/cheito55/Sk/main/SeekeeBrowser.js",
   "version": 6,
   "iconUrl": "",
   "id": "b7c3e8f1-2a91-4b67-9f44-0d6a8e2c5173",
