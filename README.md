@@ -1,4 +1,4 @@
-Seekee Browser GrayJay v0.2
+Seekee Browser GrayJay v0.2k
 
 What is implemented:
 - ES5 GrayJay source.
